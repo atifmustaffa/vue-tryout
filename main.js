@@ -245,10 +245,29 @@ const routes = [
       default: home,
       // Named views
       a: {
-        template: `<div>View A</div>`,
+        // Using i18n functional component
+        template: `
+        <div>
+          <div>View A: {{ $t('message.hello') }}</div>
+          <div><p>
+            <i18n path="message.term" tag="label" for="tos">
+              <a href="#" target="_blank">{{ $t('message.tos') }}</a>
+            </i18n>
+          </p></div>
+        </div>
+        `,
       },
       b: {
-        template: `<div>View B</div>`,
+        template: `<div>View B: {{ $t('message.hello') }}</div>`,
+        i18n: {
+          // `i18n` option, setup locale info for component
+          messages: {
+            en: { message: { hello: 'hello component based localization' } },
+            ja: {
+              message: { hello: 'こんにちは、component based localization' },
+            },
+          },
+        },
       },
     },
   },

@@ -1,14 +1,22 @@
 const messages = {
   en: {
     message: {
-      hello: 'hello world',
-      hello_user: 'hello {user}',
+      hello: 'hello',
+      world: 'world',
+      hello_world: '@.capitalize:message.hello @:message.world', // using linked
+      hello_user: '@.capitalize:message.hello {user}',
+      tos: 'Term of Service',
+      term: 'I accept xxx {0}.',
     },
   },
   ja: {
     message: {
-      hello: 'こんにちは、世界',
-      hello_user: 'こんにちは、{user}',
+      hello: 'こんにちは',
+      world: '世界',
+      hello_world: '@.capitalize:message.hello、@:message.world',
+      hello_user: '@.capitalize:message.hello、{user}',
+      tos: '利用規約',
+      term: '私は xxx の{0}に同意します。',
     },
   },
 }

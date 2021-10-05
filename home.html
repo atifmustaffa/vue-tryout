@@ -18,8 +18,10 @@
   </head>
   <body>
     <div id="app">
-      <h1>Hello {{ username || 'Beautyful' }}!</h1>
-      <h1>{{ $t('message.hello_user', {user: username || 'User'}) }}!</h1>
+      <h1>
+        {{ $t('message.hello_user', { user: username || $t('message.world') })
+        }}!
+      </h1>
       <!-- Language selector -->
       <div>
         <select v-model="$i18n.locale">
