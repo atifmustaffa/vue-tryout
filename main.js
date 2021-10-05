@@ -96,9 +96,9 @@ const productComponent = Vue.component('product', {
               <p>Rating: {{ review.rating }}</p>
             </li>
           </ul>
-        </div>
 
         <product-review @review-submitted="addReview"></product-review>
+      </div>
       </div>
       `,
   methods: {
