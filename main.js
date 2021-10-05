@@ -14,6 +14,7 @@ const products = [
         id: 1212,
         color: 'green',
         inventory: 0,
+        price: 10,
         imageLink:
           'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
       },
@@ -21,6 +22,7 @@ const products = [
         id: 1214,
         color: 'blue',
         inventory: 3,
+        price: 10,
         imageLink:
           'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
       },
@@ -40,6 +42,7 @@ const products = [
         id: 1215,
         color: 'black',
         inventory: 6,
+        price: 67,
         imageLink:
           'https://static01.nyt.com/images/2014/10/15/business/15trademark-pic1/15trademark-pic1-articleLarge.jpg',
       },
@@ -63,6 +66,7 @@ const productComponent = Vue.component('product', {
           <p v-if="inventory > 0 && inventory <= 5">Low in stock</p>
           <p v-else-if="inventory > 0">In stock</p>
           <p v-else>Out of stock</p>
+          <p><b>{{ $n(price, 'currency') }}</b></p>
           <p>Shipping: {{ shipping }}</p>
           <p v-show="product.onSale">On Sale!</p>
           <ul>
@@ -131,6 +135,9 @@ const productComponent = Vue.component('product', {
     },
     inventory: function () {
       return this.product.variants[this.product.selectedVariant].inventory
+    },
+    price: function () {
+      return this.product.variants[this.product.selectedVariant].price
     },
     shipping: function () {
       return this.premium ? 'Free' : 2.99

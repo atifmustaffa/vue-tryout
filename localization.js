@@ -47,9 +47,26 @@ const dateTimeFormats = {
   },
 }
 
+const numberFormats = {
+  en: {
+    currency: {
+      style: 'currency',
+      currency: 'USD',
+    },
+  },
+  ja: {
+    currency: {
+      style: 'currency',
+      currency: 'JPY',
+      currencyDisplay: 'symbol',
+    },
+  },
+}
+
 const i18n = new VueI18n({
   locale: 'en', // set locale
   fallbackLocale: 'en', // set fallback locale
   messages, // set locale messages
   dateTimeFormats,
+  numberFormats,
 })
