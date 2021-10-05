@@ -276,6 +276,7 @@ const router = new VueRouter({
 // }, 3000)
 
 var app = new Vue({
+  i18n,
   el: '#app',
   data: {},
   methods: {

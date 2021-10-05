@@ -6,15 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vue Tryouts</title>
     <link rel="stylesheet" href="styles.css" />
+    <!-- Vue -->
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- Vue Router -->
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!-- Vue Localization -->
+    <script src="https://unpkg.com/vue-i18n@8"></script>
+    <!-- Main -->
+    <script src="localization.js"></script>
     <script src="main.js" defer></script>
   </head>
   <body>
     <div id="app">
+      <h1>Hello {{ username || 'Beautyful' }}!</h1>
+      <h1>{{ $t('message.hello_user', {user: username || 'User'}) }}!</h1>
       <h1>Hi {{ username ? username : 'Beautyful' }}!</h1>
-      <!-- Vue Router -->
       <p>
+        <!-- Vue Router -->
         <!-- use router-link component for navigation. -->
         <!-- specify the link by passing the `to` prop. -->
         <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
@@ -29,6 +37,8 @@
       <!-- route outlet -->
       <!-- component matched by the route will render here -->
       <!-- <router-view></router-view> -->
+      <p>{{ $d(new Date(), 'short') }}</p>
+      <p>{{ $d(new Date(), 'long') }}</p>
     </div>
   </body>
 </html>
