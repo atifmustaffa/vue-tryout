@@ -278,7 +278,9 @@ const router = new VueRouter({
 var app = new Vue({
   i18n,
   el: '#app',
-  data: {},
+  data: {
+    langs: ['en', 'ja'],
+  },
   methods: {
     goBack() {
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')

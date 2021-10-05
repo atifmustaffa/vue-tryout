@@ -20,7 +20,14 @@
     <div id="app">
       <h1>Hello {{ username || 'Beautyful' }}!</h1>
       <h1>{{ $t('message.hello_user', {user: username || 'User'}) }}!</h1>
-      <h1>Hi {{ username ? username : 'Beautyful' }}!</h1>
+      <!-- Language selector -->
+      <div>
+        <select v-model="$i18n.locale">
+          <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+            {{ lang }}
+          </option>
+        </select>
+      </div>
       <p>
         <!-- Vue Router -->
         <!-- use router-link component for navigation. -->
