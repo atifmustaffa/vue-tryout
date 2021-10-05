@@ -5,14 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vue Tryouts</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="app">
-      <h1>{{ products }}</h1>
-      <div>{{ description }}</div>
+      <h1>Hi {{ username ? username : 'Beautyful' }}!</h1>
+      <!-- Vue Router -->
+      <p>
+        <!-- use router-link component for navigation. -->
+        <!-- specify the link by passing the `to` prop. -->
+        <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
+        <router-link to="/home">Home</router-link>
+        <router-link to="/products">Products</router-link>
+
+        <!-- Named views -->
+        <router-view class="view one"></router-view>
+        <router-view class="view two" name="a"></router-view>
+        <router-view class="view three" name="b"></router-view>
+      </p>
+      <!-- route outlet -->
+      <!-- component matched by the route will render here -->
+      <!-- <router-view></router-view> -->
     </div>
 
+    <!-- <script src="vue.js"></script> -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
     <script src="main.js"></script>
   </body>
 </html>
