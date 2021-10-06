@@ -13,7 +13,7 @@ const products = [
       {
         id: 1212,
         color: 'green',
-        inventory: 0,
+        inventory: 2,
         price: 10,
         imageLink:
           'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
@@ -21,7 +21,7 @@ const products = [
       {
         id: 1214,
         color: 'blue',
-        inventory: 3,
+        inventory: 8,
         price: 10,
         imageLink:
           'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
@@ -41,7 +41,7 @@ const products = [
       {
         id: 1215,
         color: 'black',
-        inventory: 6,
+        inventory: 4,
         price: 67,
         imageLink:
           'https://static01.nyt.com/images/2014/10/15/business/15trademark-pic1/15trademark-pic1-articleLarge.jpg',
@@ -107,16 +107,26 @@ const productComponent = Vue.component('product', {
       `,
   methods: {
     addToCart: function () {
-      app.$emit(
-        'update-cart',
-        this.product.variants[this.product.selectedVariant].id
-      )
+      // Update cart using vuex store
+      this.$store.commit('updateCart', {
+        pid: this.product.id,
+        vid: this.product.variants[this.product.selectedVariant].id,
+      })
     },
     updateProductSelection: function (index) {
       this.product.selectedVariant = index
     },
     addReview: function (productReview) {
       this.product.reviews.push(productReview)
+
+      // Test dispatch action, with asynchronous method
+      this.$store.commit('updateClearingStatus', true)
+
+      this.$store.dispatch('clear').then(() => {
+        // Once finished clearing reset status to false
+        this.$store.commit('updateClearingStatus', false)
+        console.log('Cart cleared')
+      })
     },
   },
   computed: {
@@ -334,6 +344,33 @@ const pdfComponent = {
   },
 }
 
+const cartComponent = Vue.component('cart', {
+  template: `
+  <div class="cart">
+    <p>Cart ({{ count }})</p>
+    <p>{{ isClearing ? 'Clearing...' : ''}}</p>
+    <p>{{ ids }}</p>
+    <p>{{ names }}</p>
+  </div>
+  `,
+  computed: {
+    count() {
+      return this.$store.state.cart.length
+    },
+    isClearing() {
+      return this.$store.state.isClearing
+    },
+    ids() {
+      return this.$store.getters.getIds.join(',')
+    },
+    names() {
+      // Try getter with params
+      // Get names of low stock from inventory threshold 5
+      return this.$store.getters.getLowStockNames(5).join(',')
+    },
+  },
+})
+
 const routes = [
   { path: '/', redirect: '/home' },
   {
@@ -402,8 +439,60 @@ const router = new VueRouter({
 //   router.push({ path: 'home' })
 // }, 3000)
 
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    cart: [],
+    isClearing: false,
+  },
+  getters: {
+    getIds: (state) => state.cart.map((idObj) => idObj.pid),
+    getLowStockNames: (state) => (minInventory) =>
+      products
+        .filter((p) =>
+          // Filter if product is exists in:
+          // Find product id matched in cart, matches variation and check variation inventory
+          state.cart.find(
+            (idObj) =>
+              p.id === idObj.pid &&
+              p.variants.find(
+                (v) => idObj.vid === v.id && v.inventory <= minInventory
+              )
+          )
+        )
+        .map((p) => p.name),
+  },
+  mutations: {
+    updateCart(state, idObj) {
+      state.cart.push(idObj)
+    },
+    clearCart(state) {
+      state.cart = []
+    },
+    updateClearingStatus(state, status) {
+      state.isClearing = status
+    },
+  },
+  actions: {
+    /**
+     * Similar to mutation but it commit mutation
+     * Logically, a state must be synchronous, but an action can be asynchronous */
+    clear(context) {
+      return new Promise((resolve, reject) => {
+        // Fake asynchronous
+        setTimeout(() => {
+          context.commit('clearCart')
+          resolve()
+        }, 2000)
+      })
+    },
+  },
+})
+
 var app = new Vue({
   i18n,
+  store,
   el: '#app',
   data: {
     cart: [],
@@ -425,9 +514,4 @@ var app = new Vue({
       // console.log(to, from)
     },
   },
-})
-
-// Cart event
-app.$on('update-cart', (id) => {
-  app.cart.push(id)
 })

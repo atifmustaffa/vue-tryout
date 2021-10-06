@@ -14,6 +14,8 @@
     <script src="https://unpkg.com/vue-i18n@8"></script>
     <!-- Pdf Js -->
     <script src="https://unpkg.com/pdfjs-dist@2.9.359/build/pdf.min.js"></script>
+    <!-- Vuex -->
+    <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
     <!-- Main -->
     <script src="localization.js"></script>
     <script src="main.js" defer></script>
@@ -44,9 +46,8 @@
         <router-link to="/products">Products</router-link>
 
         <!-- Global cart -->
-        <div class="cart">
-          <p>Cart ({{ cart.length }})</p>
-        </div>
+        <!-- Using Vuex -->
+        <cart></cart>
 
         <!-- Named views -->
         <router-view class="view one"></router-view>
