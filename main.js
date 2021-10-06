@@ -107,8 +107,8 @@ const productComponent = Vue.component('product', {
       `,
   methods: {
     addToCart: function () {
-      this.$emit(
-        'add-to-cart',
+      app.$emit(
+        'update-cart',
         this.product.variants[this.product.selectedVariant].id
       )
     },
@@ -215,26 +215,16 @@ const home = {
 
 const productsComponent = {
   template: `
-  <div>
-    <div class="cart">
-      <p>Cart ({{ cart.length }})</p>
-    </div>
-    
+  <div>    
     <product v-for="product in products" v-bind:id="product.id"
-    v-bind:key="product.id" :premium="premium" @add-to-cart="updateCart"></product>
+    v-bind:key="product.id" :premium="premium"></product>
   </div>
   `,
   data() {
     return {
-      cart: [],
       products,
       premium: true,
     }
-  },
-  methods: {
-    updateCart: function (id) {
-      this.cart.push(id)
-    },
   },
 }
 
@@ -416,6 +406,7 @@ var app = new Vue({
   i18n,
   el: '#app',
   data: {
+    cart: [],
     langs: ['en', 'ja'],
   },
   methods: {
@@ -434,4 +425,9 @@ var app = new Vue({
       // console.log(to, from)
     },
   },
+})
+
+// Cart event
+app.$on('update-cart', (id) => {
+  app.cart.push(id)
 })

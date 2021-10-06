@@ -43,6 +43,11 @@
         <router-link to="/pdf">PDF</router-link>
         <router-link to="/products">Products</router-link>
 
+        <!-- Global cart -->
+        <div class="cart">
+          <p>Cart ({{ cart.length }})</p>
+        </div>
+
         <!-- Named views -->
         <router-view class="view one"></router-view>
         <router-view class="view two" name="a"></router-view>
