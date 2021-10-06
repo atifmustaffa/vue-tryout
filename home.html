@@ -12,6 +12,8 @@
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
     <!-- Vue Localization -->
     <script src="https://unpkg.com/vue-i18n@8"></script>
+    <!-- Pdf Js -->
+    <script src="https://unpkg.com/pdfjs-dist@2.9.359/build/pdf.min.js"></script>
     <!-- Main -->
     <script src="localization.js"></script>
     <script src="main.js" defer></script>
@@ -38,6 +40,7 @@
         <!-- specify the link by passing the `to` prop. -->
         <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
         <router-link to="/home">Home</router-link>
+        <router-link to="/pdf">PDF</router-link>
         <router-link to="/products">Products</router-link>
 
         <!-- Named views -->

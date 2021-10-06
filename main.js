@@ -238,7 +238,114 @@ const productsComponent = {
   },
 }
 
+const pdfComponent = {
+  template: `
+  <div class="pdf">
+    <input type="file" id="inputFile" name="inputFile" accept=".pdf">
+    <button v-on:click="loadPdf">Load PDF</button>
+    <div v-if="pdf">
+      <div class="pdf-controller">
+        <button v-on:click="prevPage">< Prev</button>
+        <span>{{ pageNumber }}/{{ pdf.numPages }}</span>
+        <button v-on:click="nextPage">Next ></button>
+      </div>
+    </div>
+    <canvas id="pdf-canvas"></canvas>
+  </div>
+  `,
+  data() {
+    return {
+      scale: 1.5,
+      pageNumber: 1,
+      pageRendering: false,
+      pdf: null,
+    }
+  },
+  methods: {
+    loadPdf: function () {
+      // Store this,
+      let _this = this
+
+      let inputFile = document.getElementById('inputFile')
+      var file = inputFile.files[0]
+
+      // Make sure file not null
+      if (!file) return
+
+      var fileReader = new FileReader()
+
+      fileReader.onload = function () {
+        var typedarray = new Uint8Array(this.result)
+
+        // Load worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://unpkg.com/pdfjs-dist@2.9.359/build/pdf.worker.min.js'
+        const loadingTask = pdfjsLib.getDocument(typedarray)
+        loadingTask.promise.then(
+          (pdf) => {
+            console.log('pdf loaded')
+            // Store pdf document
+            _this.pdf = pdf
+
+            // Fetch the first page
+            _this.pageNumber = 1
+            _this.renderPage(_this.pageNumber)
+          },
+          function (reason) {
+            // PDF loading error
+            console.error(reason)
+          }
+        )
+      }
+      // Read the file as ArrayBuffer
+      fileReader.readAsArrayBuffer(file)
+    },
+    renderPage(pageNumber) {
+      let _this = this
+      _this.pageRendering = true
+
+      // Render by page number
+      this.pdf.getPage(pageNumber).then(function (page) {
+        console.log('Page loaded')
+
+        var scale = 1.5
+        var viewport = page.getViewport({ scale: scale })
+
+        // Prepare canvas using PDF page dimensions
+        var canvas = document.getElementById('pdf-canvas')
+        var context = canvas.getContext('2d')
+        canvas.height = viewport.height
+        canvas.width = viewport.width
+
+        // Render PDF page into canvas context
+        var renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        }
+        var renderTask = page.render(renderContext)
+        renderTask.promise.then(function () {
+          _this.pageRendering = false
+          console.log('Page rendered')
+        })
+      })
+    },
+    prevPage: function () {
+      // Make sure page is not rendering another page and not rendering the same page
+      if (!this.pageRendering && this.pageNumber > 1) {
+        this.renderPage(--this.pageNumber)
+      }
+    },
+    nextPage: function () {
+      // Make sure page is not rendering another page and not rendering the same page
+      if (!this.pageRendering && this.pageNumber < this.pdf.numPages) {
+        this.renderPage(++this.pageNumber)
+      }
+    },
+  },
+}
+
 const routes = [
+  { path: '/', redirect: '/home' },
   {
     path: '/home',
     components: {
@@ -279,6 +386,10 @@ const routes = [
     path: '/products/:id',
     component: productComponent,
     props: true,
+  },
+  {
+    path: '/pdf',
+    component: pdfComponent,
   },
   {
     path: '/error',

@@ -89,3 +89,23 @@ textarea {
   color: #16c0b0;
   text-decoration: underline;
 }
+
+.pdf {
+  margin: 16px 0;
+}
+
+.pdf input[type='file'],
+.pdf button {
+  margin: 0;
+}
+
+.pdf-controller {
+  text-align: center;
+}
+
+#pdf-canvas {
+  width: 100%;
+  max-width: 800px;
+  display: block;
+  margin: auto;
+}
